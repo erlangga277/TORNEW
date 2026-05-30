@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dokumentasi cybersecurity bergaya artikel untuk writeup TryHackMe Tor.">
+    <title>Tor TryHackMe Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="#home" aria-label="Tor Docs Home">
+                <span class="brand-logo">T</span>
+                <span class="brand-text">Tor Docs</span>
+            </a>
+
+            <nav class="nav-menu" aria-label="Main navigation">
+                <a href="#home">Home</a>
+                <a href="#documentation">Documentation</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="home" class="page-shell">
+        <section class="hero-section fade-in">
+            <p class="eyebrow">TryHackMe Writeup</p>
+            <h1>Tor Room Documentation: Setup, Proxychains, dan Tor Browser</h1>
+            <div class="article-meta">
+                <span>Ditulis oleh Erlangga</span>
+                <span>30 Mei 2026</span>
+            </div>
+            <p class="hero-description">
+                Dokumentasi ini merangkum proses dasar penggunaan Tor pada lingkungan pembelajaran cybersecurity:
+                instalasi service Tor, konfigurasi Proxychains, pengecekan koneksi, sampai setup Tor Browser dengan
+                mode keamanan yang lebih aman.
+            </p>
+        </section>
+
+        <section class="toc-card fade-in" aria-labelledby="toc-title">
+            <h2 id="toc-title">Table of Contents</h2>
+            <ol class="toc-list">
+                <li><a href="#step-1">Step 1 - Install Tor Service</a></li>
+                <li><a href="#step-2">Step 2 - Start dan Cek Status Tor</a></li>
+                <li><a href="#step-3">Step 3 - Install Proxychains</a></li>
+                <li><a href="#step-4">Step 4 - Validasi DNS Leak Test</a></li>
+                <li><a href="#step-5">Step 5 - Jalankan Tor Browser</a></li>
+            </ol>
+        </section>
+
+        <section id="documentation" class="content-section">
+            <article id="step-1" class="step fade-in">
+                <div class="step-copy">
+                    <span class="step-label">Step 1</span>
+                    <h2>Initial Setup: Install Tor Service</h2>
+                    <p>
+                        Langkah awal adalah memasang paket Tor pada sistem. Pada Kali Linux atau distro berbasis Debian,
+                        service Tor dapat dipasang melalui terminal menggunakan perintah instalasi paket. Setelah proses
+                        selesai, service Tor siap dijalankan sebagai jalur koneksi anonim untuk kebutuhan lab.
+                    </p>
+                    <div class="answer-box">
+                        <h3>Jawaban</h3>
+                        <ul>
+                            <li><strong>1.1</strong> Jalankan <code>apt-get install tor</code> untuk install atau update paket Tor. <span>No answer needed.</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <figure class="screenshot-card">
+                    <img src="images/01.png" alt="Terminal menjalankan instalasi paket Tor">
+                    <figcaption>Instalasi paket Tor melalui terminal.</figcaption>
+                </figure>
+            </article>
+
+            <article id="step-2" class="step fade-in">
+                <div class="step-copy">
+                    <span class="step-label">Step 2</span>
+                    <h2>Service Check: Start dan Status Tor</h2>
+                    <p>
+                        Setelah Tor terpasang, jalankan service Tor lalu cek statusnya. Pemeriksaan ini memastikan service
+                        aktif dan tidak gagal saat dijalankan. Jika status sudah aktif, konfigurasi berikutnya dapat
+                        dilanjutkan ke penggunaan proxy.
+                    </p>
+                    <div class="answer-box">
+                        <h3>Jawaban</h3>
+                        <ul>
+                            <li><strong>1.2</strong> Jalankan <code>service tor start</code> untuk memulai service Tor. <span>No answer needed.</span></li>
+                            <li><strong>1.3</strong> Jalankan <code>service tor status</code> untuk mengecek status service. <span>No answer needed.</span></li>
+                            <li><strong>1.4</strong> Jalankan <code>service tor stop</code> untuk menghentikan service Tor. <span>No answer needed.</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <figure class="screenshot-card">
+                    <img src="images/02.png" alt="Terminal menampilkan status service Tor aktif">
+                    <figcaption>Pengecekan status service Tor.</figcaption>
+                </figure>
+            </article>
+
+            <article id="step-3" class="step fade-in">
+                <div class="step-copy">
+                    <span class="step-label">Step 3</span>
+                    <h2>Configuration: Install Proxychains</h2>
+                    <p>
+                        Proxychains digunakan untuk memaksa koneksi TCP dari aplikasi tertentu melewati proxy seperti Tor.
+                        Pada tahap ini, pasang Proxychains lalu siapkan konfigurasi seperti <code>dynamic_chain</code> dan
+                        pengaturan proxy agar aplikasi dapat diarahkan melalui jaringan Tor.
+                    </p>
+                    <div class="answer-box">
+                        <h3>Jawaban</h3>
+                        <ul>
+                            <li><strong>2.1</strong> Jalankan <code>apt install proxychains</code> untuk install atau update Proxychains. <span>No answer needed.</span></li>
+                            <li><strong>2.2</strong> Edit konfigurasi dengan <code>nano /etc/proxychains.conf</code>. <span>No answer needed.</span></li>
+                            <li><strong>2.3</strong> Aktifkan <code>dynamic_chain</code>, nonaktifkan chain lain bila perlu, lalu aktifkan <code>proxy_dns</code> untuk mengurangi risiko DNS leak. <span>No answer needed.</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <figure class="screenshot-card">
+                    <img src="images/03.png" alt="Terminal menjalankan instalasi Proxychains">
+                    <figcaption>Instalasi Proxychains untuk routing koneksi melalui proxy.</figcaption>
+                </figure>
+            </article>
+
+            <article id="step-4" class="step fade-in">
+                <div class="step-copy">
+                    <span class="step-label">Step 4</span>
+                    <h2>Verification: DNS Leak Test</h2>
+                    <p>
+                        Setelah browser dijalankan melalui Proxychains, validasi koneksi dengan situs pengecek DNS leak.
+                        Tujuannya adalah memastikan alamat IP dan DNS yang terlihat bukan lagi koneksi asli dari perangkat,
+                        sehingga konfigurasi proxy bekerja sesuai kebutuhan lab.
+                    </p>
+                    <div class="answer-box">
+                        <h3>Jawaban</h3>
+                        <ul>
+                            <li><strong>2.4</strong> Start Tor service lalu jalankan browser dengan <code>proxychains firefox</code>. <span>No answer needed.</span></li>
+                            <li><strong>2.5</strong> Cek perubahan IP dan DNS melalui situs seperti <code>dnsleaktest.com</code>. <span>No answer needed.</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <figure class="screenshot-card">
+                    <img src="images/04.png" alt="Halaman DNS leak test untuk validasi koneksi">
+                    <figcaption>Validasi DNS leak setelah koneksi diarahkan melalui Tor.</figcaption>
+                </figure>
+            </article>
+
+            <article id="step-5" class="step fade-in">
+                <div class="step-copy">
+                    <span class="step-label">Step 5</span>
+                    <h2>Final Setup: Jalankan Tor Browser</h2>
+                    <p>
+                        Tahap terakhir adalah menjalankan Tor Browser dan mengatur level keamanan ke mode yang lebih aman.
+                        Tor Browser membantu menyamarkan fingerprint browser dan mengarahkan trafik melalui jaringan Tor
+                        secara langsung, sehingga lebih praktis untuk aktivitas browsing berbasis privasi.
+                    </p>
+                    <div class="answer-box">
+                        <h3>Jawaban</h3>
+                        <ul>
+                            <li><strong>3.1</strong> Selesaikan instalasi Tor Browser. <span>No answer needed.</span></li>
+                            <li><strong>3.2</strong> Jalankan Tor Browser dan atur privacy/security level ke <code>Safer</code>. <span>No answer needed.</span></li>
+                            <li><strong>3.3</strong> Search engine pada alamat onion yang diberikan adalah <strong>DuckDuckGo</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <figure class="screenshot-card">
+                    <img src="images/05.png" alt="Tampilan Tor Browser setelah dijalankan">
+                    <figcaption>Tor Browser siap digunakan untuk browsing melalui jaringan Tor.</figcaption>
+                </figure>
+            </article>
+        </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+        <div class="footer-inner">
+            <p>&copy; 2026 Tor Docs. All rights reserved.</p>
+            <div class="social-links" aria-label="Social links">
+                <a href="#" aria-label="GitHub">GitHub</a>
+                <a href="#" aria-label="LinkedIn">LinkedIn</a>
+                <a href="#" aria-label="Medium">Medium</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
